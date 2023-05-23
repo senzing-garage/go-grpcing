@@ -1,7 +1,9 @@
-package examplepackage
+package grpcurl
 
 import (
 	"context"
+
+	"google.golang.org/grpc"
 )
 
 // ----------------------------------------------------------------------------
@@ -9,22 +11,14 @@ import (
 // ----------------------------------------------------------------------------
 
 // The ExamplePackage interface is an example interface.
-type ExamplePackage interface {
-	SaySomething(ctx context.Context) error
+type Url interface {
+	Parse(ctx context.Context, grpcUrl string) (string, []grpc.DialOption, error)
 }
 
 // ----------------------------------------------------------------------------
 // Constants
 // ----------------------------------------------------------------------------
 
-// An example constant.
-const ExampleConstant = 1
-
 // ----------------------------------------------------------------------------
 // Variables
 // ----------------------------------------------------------------------------
-
-// An example variable.
-var ExampleVariable = map[int]string{
-	1: "Just a string",
-}
