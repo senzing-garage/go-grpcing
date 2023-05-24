@@ -1,40 +1,40 @@
 /*
-One or two sentence synopsis of the package...
+grpcurl is used to transfer information conveyed in a URL into an address of a gRPC server and a list of grp.DialOption.
 
 # Overview
 
-One or two paragraph overview of the package...
-(This page describes the nature of the individual package.)
-
 More information at https://github.com/senzing/go-grpcing
-
-# Another Header
-
-Details of the package...
-Lorem ipsum dolor sit amet, consectetur adipiscing elit...
 
 # Examples
 
-The examples given here should be specific to the package.
-
-Examples of use can be seen in the examplepackage_test.go files.
+Example of use:
 
 	package main
-	import (
-		fmt
 
-		"github.com/senzing/go-grpcing/examplepackage"
+	import (
+		"context"
+		"fmt"
+		"reflect"
+
+		"github.com/senzing/go-grpcing/grpcurl"
+		"google.golang.org/grpc"
 	)
 
 	func main() {
 		ctx := context.TODO()
-		testObject := &ExamplePackageImpl{
-			Something: "I'm here",
-		}
-		err := testObject.SaySomething(ctx)
+		grpcUrl := "grpc://localhost:8258"
+
+		grpcAddress, grpcOptions, err := grpcurl.Parse(ctx, grpcUrl)
 		if err != nil {
-			fmt.Println("whoops")
+			panic(err)
+		}
+
+		grpcConnection, err := grpc.Dial(grpcAddress, grpcOptions...)
+		if err != nil {
+			panic(err)
 		}
 	}
+
+Additional examples of use can be seen in https://github.com/Senzing/go-grpcing/blob/main/grpcurl/grpcurl_test.go
 */
 package grpcurl
