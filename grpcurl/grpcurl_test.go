@@ -91,9 +91,9 @@ func TestParse(test *testing.T) {
 		test.Run(testCase.name, func(test *testing.T) {
 			grpcTarget, grpcDialOptions, err := Parse(ctx, testCase.url)
 			assert.Equal(test, testCase.expectedError, err, testCase.name+"-err")
-			assert.Equal(test, testCase.expectedTarget, grpcTarget, testCase.name+"-GrpcAddress")
-			assert.Equal(test, testCase.expectedDialOptionsLen, len(grpcDialOptions), testCase.name+"-GrpcOptionsLen")
-			// assert.Equal(test, testCase.expectedDialOptions, grpcDialOptions, testCase.name+"-GrpcOptions")
+			assert.Equal(test, testCase.expectedTarget, grpcTarget, testCase.name+"-GrpcTarget")
+			assert.Equal(test, testCase.expectedDialOptionsLen, len(grpcDialOptions), testCase.name+"-GrpcDialOptionsLen")
+			// assert.Equal(test, testCase.expectedDialOptions, grpcDialOptions, testCase.name+"-GrpcDialOptions")
 		})
 	}
 }

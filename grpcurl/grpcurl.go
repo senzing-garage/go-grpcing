@@ -14,8 +14,8 @@ import (
 // ----------------------------------------------------------------------------
 
 /*
-The Parse function parses a URL to extract information to create GrpcAddress and
-GrpcOptions.
+The Parse function parses a URL to extract information to create GrpcTarget and
+GrpcDialOptions.
 
 Input
   - ctx: A context to control lifecycle.

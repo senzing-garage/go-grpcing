@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added to 0.1.0
 
 - Initial functionality
-- Support for grpc.Dial(target) (aka "GrpcAddress")
+- Support for grpc.Dial(target)
 - Support for the following gRPC client `grpc.DialOption`:
   - `grpc.WithTransportCredentials(insecure.NewCredentials()))`
 - Support for the following gRPC server `grpc.ServerOption`.
