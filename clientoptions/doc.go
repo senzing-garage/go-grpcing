@@ -1,5 +1,5 @@
 /*
-clientoptions is used to transfer information conveyed in a URL into a list of grp.DialOption.
+clientoptions is used to transfer information conveyed in a URL into a slice of grp.DialOption.
 
 # Overview
 

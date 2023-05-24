@@ -23,7 +23,7 @@ Input
 
 Output
   - grpcTarget: The hostname:port
-  - grpcDialOptions: A list of configuration options for gRPC server/client
+  - grpcDialOptions: A slice of configuration options for gRPC server/client
 */
 func Parse(ctx context.Context, grpcUrl string) (string, []grpc.DialOption, error) {
 	var err error = nil

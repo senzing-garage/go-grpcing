@@ -1,5 +1,5 @@
 /*
-grpcurl is used to transfer information conveyed in a URL into an address of a gRPC server and a list of grp.DialOption.
+grpcurl is used to transfer information conveyed in a URL into an address of a gRPC server and a slice of grpc.DialOption.
 
 # Overview
 
