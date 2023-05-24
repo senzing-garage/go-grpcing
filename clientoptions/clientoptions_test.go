@@ -1,9 +1,10 @@
-package grpcurl
+package clientoptions
 
 import (
 	"context"
 	"errors"
 	"fmt"
+	"net/url"
 	"os"
 	"testing"
 
@@ -20,7 +21,7 @@ var testCasesForGrpcurl = []struct {
 	expectedError          error
 }{
 	{
-		name:                   "grpcurl-0001",
+		name:                   "clientoptions-0001",
 		url:                    "grpc://localhost",
 		expectedAddress:        "localhost",
 		expectedDialOptions:    []grpc.DialOption{},
@@ -28,7 +29,7 @@ var testCasesForGrpcurl = []struct {
 		expectedError:          nil,
 	},
 	{
-		name:                   "grpcurl-0002",
+		name:                   "clientoptions-0002",
 		url:                    "grpc://localhost:1234",
 		expectedAddress:        "localhost:1234",
 		expectedDialOptions:    []grpc.DialOption{},
@@ -36,15 +37,15 @@ var testCasesForGrpcurl = []struct {
 		expectedError:          nil,
 	},
 	{
-		name:                   "grpcurl-0003",
+		name:                   "clientoptions-0003",
 		url:                    `http://localhost:1234`,
 		expectedAddress:        "",
 		expectedDialOptions:    []grpc.DialOption{},
-		expectedDialOptionsLen: 0,
-		expectedError:          errors.New("gRPC URL must start with grpc://, not http://.  (http://localhost:1234)"),
+		expectedDialOptionsLen: 1,
+		expectedError:          nil,
 	},
 	{
-		name:                   "grpcurl-0004",
+		name:                   "clientoptions-0004",
 		url:                    `grpc://localhost:1234/bob/?something="bob2"`,
 		expectedAddress:        "localhost:1234",
 		expectedDialOptions:    []grpc.DialOption{},
@@ -85,13 +86,14 @@ func teardown() error {
 // Test interface functions
 // ----------------------------------------------------------------------------
 
-func TestParse(test *testing.T) {
+func TestGetDialOptions(test *testing.T) {
 	ctx := context.TODO()
 	for _, testCase := range testCasesForGrpcurl {
 		test.Run(testCase.name, func(test *testing.T) {
-			grpcAddress, grpcOptions, err := Parse(ctx, testCase.url)
+			parsedUrl, err := url.Parse(testCase.url)
+			assert.Nil(test, err)
+			grpcOptions, err := GetDialOptions(ctx, *parsedUrl)
 			assert.Equal(test, testCase.expectedError, err, testCase.name+"-err")
-			assert.Equal(test, testCase.expectedAddress, grpcAddress, testCase.name+"-GrpcAddress")
 			assert.Equal(test, testCase.expectedDialOptionsLen, len(grpcOptions), testCase.name+"-GrpcOptionsLen")
 			// assert.Equal(test, testCase.expectedDialOptions, grpcOptions, testCase.name+"-GrpcOptions")
 		})
@@ -102,15 +104,18 @@ func TestParse(test *testing.T) {
 // Examples for godoc documentation
 // ----------------------------------------------------------------------------
 
-func ExampleParse_simple() {
-	// For more information, visit https://github.com/Senzing/go-grpcing/blob/main/grpcurl/grpcurl_test.go
+func ExampleGetDialOptions_simple() {
+	// For more information, visit https://github.com/Senzing/go-grpcing/blob/main/clientoptions/clientoptions_test.go
 	ctx := context.TODO()
 	grpcUrl := "grpc://localhost:8258"
-	grpcAddress, grpcOptions, err := Parse(ctx, grpcUrl)
+	parsedUrl, err := url.Parse(grpcUrl)
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Println(grpcAddress, len(grpcOptions))
-	// Output:
-	// localhost:8258 1
+	grpcOptions, err := GetDialOptions(ctx, *parsedUrl)
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(len(grpcOptions))
+	// Output: 1
 }
