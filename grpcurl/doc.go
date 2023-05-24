@@ -24,12 +24,12 @@ Example of use:
 		ctx := context.TODO()
 		grpcUrl := "grpc://localhost:8258"
 
-		grpcAddress, grpcOptions, err := grpcurl.Parse(ctx, grpcUrl)
+		grpcTarget, grpcDialOptions, err := grpcurl.Parse(ctx, grpcUrl)
 		if err != nil {
 			panic(err)
 		}
 
-		grpcConnection, err := grpc.Dial(grpcAddress, grpcOptions...)
+		grpcConnection, err := grpc.Dial(grpcTarget, grpcDialOptions...)
 		if err != nil {
 			panic(err)
 		}

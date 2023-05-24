@@ -15,7 +15,7 @@ import (
 var testCasesForGrpcurl = []struct {
 	name                   string
 	url                    string
-	expectedAddress        string
+	expectedTarget         string
 	expectedDialOptions    []grpc.DialOption
 	expectedDialOptionsLen int
 	expectedError          error
@@ -23,7 +23,7 @@ var testCasesForGrpcurl = []struct {
 	{
 		name:                   "clientoptions-0001",
 		url:                    "grpc://localhost",
-		expectedAddress:        "localhost",
+		expectedTarget:         "localhost",
 		expectedDialOptions:    []grpc.DialOption{},
 		expectedDialOptionsLen: 1,
 		expectedError:          nil,
@@ -31,7 +31,7 @@ var testCasesForGrpcurl = []struct {
 	{
 		name:                   "clientoptions-0002",
 		url:                    "grpc://localhost:1234",
-		expectedAddress:        "localhost:1234",
+		expectedTarget:         "localhost:1234",
 		expectedDialOptions:    []grpc.DialOption{},
 		expectedDialOptionsLen: 1,
 		expectedError:          nil,
@@ -39,7 +39,7 @@ var testCasesForGrpcurl = []struct {
 	{
 		name:                   "clientoptions-0003",
 		url:                    `http://localhost:1234`,
-		expectedAddress:        "",
+		expectedTarget:         "",
 		expectedDialOptions:    []grpc.DialOption{},
 		expectedDialOptionsLen: 1,
 		expectedError:          nil,
@@ -47,7 +47,7 @@ var testCasesForGrpcurl = []struct {
 	{
 		name:                   "clientoptions-0004",
 		url:                    `grpc://localhost:1234/bob/?something="bob2"`,
-		expectedAddress:        "localhost:1234",
+		expectedTarget:         "localhost:1234",
 		expectedDialOptions:    []grpc.DialOption{},
 		expectedDialOptionsLen: 0,
 		expectedError:          errors.New("not sure how to parse gRPC URL: grpc://localhost:1234/bob/?something=\"bob2\""),
@@ -92,10 +92,10 @@ func TestGetDialOptions(test *testing.T) {
 		test.Run(testCase.name, func(test *testing.T) {
 			parsedUrl, err := url.Parse(testCase.url)
 			assert.Nil(test, err)
-			grpcOptions, err := GetDialOptions(ctx, *parsedUrl)
+			grpcDialOptions, err := GetDialOptions(ctx, *parsedUrl)
 			assert.Equal(test, testCase.expectedError, err, testCase.name+"-err")
-			assert.Equal(test, testCase.expectedDialOptionsLen, len(grpcOptions), testCase.name+"-GrpcOptionsLen")
-			// assert.Equal(test, testCase.expectedDialOptions, grpcOptions, testCase.name+"-GrpcOptions")
+			assert.Equal(test, testCase.expectedDialOptionsLen, len(grpcDialOptions), testCase.name+"-DialOptionsLen")
+			// assert.Equal(test, testCase.expectedDialOptions, dialOptions, testCase.name+"-DialOptions")
 		})
 	}
 }
@@ -112,10 +112,10 @@ func ExampleGetDialOptions_simple() {
 	if err != nil {
 		fmt.Println(err)
 	}
-	grpcOptions, err := GetDialOptions(ctx, *parsedUrl)
+	grpcDialOptions, err := GetDialOptions(ctx, *parsedUrl)
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Println(len(grpcOptions))
+	fmt.Println(len(grpcDialOptions))
 	// Output: 1
 }

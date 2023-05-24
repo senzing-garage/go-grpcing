@@ -22,25 +22,25 @@ Input
   - grpcUrl: A URL starting with grpc://
 
 Output
-  - grpcAddress: The hostname:port
+  - grpcTarget: The hostname:port
   - grpcDialOptions: A list of configuration options for gRPC server/client
 */
 func Parse(ctx context.Context, grpcUrl string) (string, []grpc.DialOption, error) {
 	var err error = nil
-	var grpcAddress = ""
-	var grpcOptions = []grpc.DialOption{}
+	var grpcTarget = ""
+	var grpcDialOptions = []grpc.DialOption{}
 
 	parsedUrl, err := url.Parse(grpcUrl)
 	if err != nil {
-		return grpcAddress, grpcOptions, err
+		return grpcTarget, grpcDialOptions, err
 	}
 
 	switch parsedUrl.Scheme {
 	case "grpc":
-		grpcAddress = parsedUrl.Host
-		grpcOptions, err = clientoptions.GetDialOptions(ctx, *parsedUrl)
+		grpcTarget = parsedUrl.Host
+		grpcDialOptions, err = clientoptions.GetDialOptions(ctx, *parsedUrl)
 	default:
 		err = fmt.Errorf("gRPC URL must start with grpc://, not %s://.  (%s)", parsedUrl.Scheme, grpcUrl)
 	}
-	return grpcAddress, grpcOptions, err
+	return grpcTarget, grpcDialOptions, err
 }
