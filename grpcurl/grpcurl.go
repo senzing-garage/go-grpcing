@@ -26,7 +26,6 @@ Output
   - grpcDialOptions: A slice of configuration options for gRPC server/client
 */
 func Parse(ctx context.Context, grpcUrl string) (string, []grpc.DialOption, error) {
-	var err error = nil
 	var grpcTarget = ""
 	var grpcDialOptions = []grpc.DialOption{}
 
