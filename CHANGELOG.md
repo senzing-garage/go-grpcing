@@ -13,8 +13,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.1.1] - 2023-06-16
 
 - Refactored to `template-go`
-- Update dependencies
-  - github.com/stretchr/testify v1.8.4
 
 ### Changed in 0.1.1
 
