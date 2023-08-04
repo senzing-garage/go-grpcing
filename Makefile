@@ -1,11 +1,15 @@
 # Makefile for go-grpcing.
 
+# -----------------------------------------------------------------------------
+# Variables
+# -----------------------------------------------------------------------------
+
 # "Simple expanded" variables (':=')
 
 # PROGRAM_NAME is the name of the GIT repository.
 PROGRAM_NAME := $(shell basename `git rev-parse --show-toplevel`)
 MAKEFILE_PATH := $(abspath $(lastword $(MAKEFILE_LIST)))
-MAKEFILE_DIRECTORY := $(dir $(MAKEFILE_PATH))
+MAKEFILE_DIRECTORY := $(shell dirname $(MAKEFILE_PATH))
 TARGET_DIRECTORY := $(MAKEFILE_DIRECTORY)/target
 BUILD_VERSION := $(shell git describe --always --tags --abbrev=0 --dirty  | sed 's/v//')
 BUILD_TAG := $(shell git describe --always --tags --abbrev=0  | sed 's/v//')
@@ -32,6 +36,7 @@ default: help
 
 # -----------------------------------------------------------------------------
 # Build
+#  - The "build" target is implemented in Makefile.OS.ARCH files.
 # -----------------------------------------------------------------------------
 
 .PHONY: dependencies
@@ -87,5 +92,5 @@ print-make-variables:
 .PHONY: help
 help:
 	@echo "Build $(PROGRAM_NAME) version $(BUILD_VERSION)-$(BUILD_ITERATION)".
-	@echo "All targets:"
-	@$(MAKE) -pRrq -f $(lastword $(MAKEFILE_LIST)) : 2>/dev/null | awk -v RS= -F: '/^# File/,/^# Finished Make data base/ {if ($$1 !~ "^[#.]") {print $$1}}' | sort | egrep -v -e '^[^[:alnum:]]' -e '^$@$$' | xargs
+	@echo "Makefile targets:"
+	@$(MAKE) -pRrq -f $(firstword $(MAKEFILE_LIST)) : 2>/dev/null | awk -v RS= -F: '/^# File/,/^# Finished Make data base/ {if ($$1 !~ "^[#.]") {print $$1}}' | sort | egrep -v -e '^[^[:alnum:]]' -e '^$@$$' | xargs
