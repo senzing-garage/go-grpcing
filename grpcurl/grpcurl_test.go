@@ -103,7 +103,7 @@ func TestParse(test *testing.T) {
 // ----------------------------------------------------------------------------
 
 func ExampleParse_simple() {
-	// For more information, visit https://github.com/Senzing/go-grpcing/blob/main/grpcurl/grpcurl_test.go
+	// For more information, visit https://github.com/senzing-garage/go-grpcing/blob/main/grpcurl/grpcurl_test.go
 	ctx := context.TODO()
 	grpcUrl := "grpc://localhost:8258"
 	grpcTarget, grpcDialOptions, err := Parse(ctx, grpcUrl)

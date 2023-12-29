@@ -6,7 +6,7 @@ One or two sentence synopsis of the package...
 One or two paragraph overview of the package...
 (This page describes the nature of the individual package.)
 
-More information at https://github.com/senzing/go-grpcing
+More information at https://github.com/senzing-garage/go-grpcing
 
 # Another Header
 
@@ -23,7 +23,7 @@ Examples of use can be seen in the examplepackage_test.go files.
 	import (
 		fmt
 
-		"github.com/senzing/go-grpcing/examplepackage"
+		"github.com/senzing-garage/go-grpcing/examplepackage"
 	)
 
 	func main() {

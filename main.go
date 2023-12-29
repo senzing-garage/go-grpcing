@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"reflect"
 
-	"github.com/senzing/go-grpcing/grpcurl"
+	"github.com/senzing-garage/go-grpcing/grpcurl"
 	"google.golang.org/grpc"
 )
 

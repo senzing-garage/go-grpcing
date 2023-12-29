@@ -10,7 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed in 0.1.3
 
-- Refactor to [template-go](https://github.com/Senzing/template-go)
+- Refactor to [template-go](https://github.com/senzing-garage/template-go)
 - Update dependencies
   - google.golang.org/grpc v1.58.3
 

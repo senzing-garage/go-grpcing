@@ -105,7 +105,7 @@ func TestGetDialOptions(test *testing.T) {
 // ----------------------------------------------------------------------------
 
 func ExampleGetDialOptions_simple() {
-	// For more information, visit https://github.com/Senzing/go-grpcing/blob/main/clientoptions/clientoptions_test.go
+	// For more information, visit https://github.com/senzing-garage/go-grpcing/blob/main/clientoptions/clientoptions_test.go
 	ctx := context.TODO()
 	grpcUrl := "grpc://localhost:8258"
 	parsedUrl, err := url.Parse(grpcUrl)

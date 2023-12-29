@@ -3,10 +3,10 @@ clientoptions is used to transfer information conveyed in a URL into a slice of 
 
 # Overview
 
-More information at https://github.com/senzing/go-grpcing
+More information at https://github.com/senzing-garage/go-grpcing
 
 # Examples
 
-Examples of use can be seen in https://github.com/Senzing/go-grpcing/blob/main/clientoptions/clientoptions_test.go
+Examples of use can be seen in https://github.com/senzing-garage/go-grpcing/blob/main/clientoptions/clientoptions_test.go
 */
 package clientoptions
