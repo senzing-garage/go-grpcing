@@ -3,7 +3,7 @@ grpcurl is used to transfer information conveyed in a URL into an address of a g
 
 # Overview
 
-More information at https://github.com/senzing/go-grpcing
+More information at https://github.com/senzing-garage/go-grpcing
 
 # Examples
 
@@ -16,7 +16,7 @@ Example of use:
 		"fmt"
 		"reflect"
 
-		"github.com/senzing/go-grpcing/grpcurl"
+		"github.com/senzing-garage/go-grpcing/grpcurl"
 		"google.golang.org/grpc"
 	)
 
@@ -35,6 +35,6 @@ Example of use:
 		}
 	}
 
-Additional examples of use can be seen in https://github.com/Senzing/go-grpcing/blob/main/grpcurl/grpcurl_test.go
+Additional examples of use can be seen in https://github.com/senzing-garage/go-grpcing/blob/main/grpcurl/grpcurl_test.go
 */
 package grpcurl

@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"net/url"
 
-	"github.com/senzing/go-grpcing/clientoptions"
+	"github.com/senzing-garage/go-grpcing/clientoptions"
 	"google.golang.org/grpc"
 )
 
