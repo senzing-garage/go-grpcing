@@ -23,18 +23,19 @@ Input
 Output
   - grpcDialOptions: A slice of configuration options for gRPC server/client
 */
-func GetDialOptions(ctx context.Context, parsedUrl url.URL) ([]grpc.DialOption, error) {
-	var err error = nil
+func GetDialOptions(ctx context.Context, parsedURL url.URL) ([]grpc.DialOption, error) {
+	_ = ctx
+	var err error
 	var grpcDialOptions = []grpc.DialOption{}
 
 	// userName := parsedUrl.User.Username()
 	// password, isSet := parsedUrl.User.Password()
 
-	queryParameters := parsedUrl.Query()
+	queryParameters := parsedURL.Query()
 	if len(queryParameters) == 0 {
 		grpcDialOptions = append(grpcDialOptions, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	} else {
-		err = fmt.Errorf("not sure how to parse gRPC URL: %s", parsedUrl.String())
+		err = fmt.Errorf("not sure how to parse gRPC URL: %s", parsedURL.String())
 	}
 
 	return grpcDialOptions, err

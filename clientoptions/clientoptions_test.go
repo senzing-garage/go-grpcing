@@ -9,6 +9,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 	"google.golang.org/grpc"
 )
 
@@ -73,12 +74,12 @@ func TestMain(m *testing.M) {
 }
 
 func setup() error {
-	var err error = nil
+	var err error
 	return err
 }
 
 func teardown() error {
-	var err error = nil
+	var err error
 	return err
 }
 
@@ -90,12 +91,11 @@ func TestGetDialOptions(test *testing.T) {
 	ctx := context.TODO()
 	for _, testCase := range testCasesForGrpcurl {
 		test.Run(testCase.name, func(test *testing.T) {
-			parsedUrl, err := url.Parse(testCase.url)
-			assert.Nil(test, err)
-			grpcDialOptions, err := GetDialOptions(ctx, *parsedUrl)
+			parsedURL, err := url.Parse(testCase.url)
+			require.NoError(test, err)
+			grpcDialOptions, err := GetDialOptions(ctx, *parsedURL)
 			assert.Equal(test, testCase.expectedError, err, testCase.name+"-err")
-			assert.Equal(test, testCase.expectedDialOptionsLen, len(grpcDialOptions), testCase.name+"-DialOptionsLen")
-			// assert.Equal(test, testCase.expectedDialOptions, dialOptions, testCase.name+"-DialOptions")
+			assert.Len(test, grpcDialOptions, testCase.expectedDialOptionsLen, testCase.name+"-DialOptionsLen")
 		})
 	}
 }
@@ -107,12 +107,12 @@ func TestGetDialOptions(test *testing.T) {
 func ExampleGetDialOptions_simple() {
 	// For more information, visit https://github.com/senzing-garage/go-grpcing/blob/main/clientoptions/clientoptions_test.go
 	ctx := context.TODO()
-	grpcUrl := "grpc://localhost:8258"
-	parsedUrl, err := url.Parse(grpcUrl)
+	grpcURL := "grpc://localhost:8258"
+	parsedURL, err := url.Parse(grpcURL)
 	if err != nil {
 		fmt.Println(err)
 	}
-	grpcDialOptions, err := GetDialOptions(ctx, *parsedUrl)
+	grpcDialOptions, err := GetDialOptions(ctx, *parsedURL)
 	if err != nil {
 		fmt.Println(err)
 	}
