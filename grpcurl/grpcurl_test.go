@@ -72,12 +72,12 @@ func TestMain(m *testing.M) {
 }
 
 func setup() error {
-	var err error = nil
+	var err error
 	return err
 }
 
 func teardown() error {
-	var err error = nil
+	var err error
 	return err
 }
 
@@ -92,8 +92,7 @@ func TestParse(test *testing.T) {
 			grpcTarget, grpcDialOptions, err := Parse(ctx, testCase.url)
 			assert.Equal(test, testCase.expectedError, err, testCase.name+"-err")
 			assert.Equal(test, testCase.expectedTarget, grpcTarget, testCase.name+"-GrpcTarget")
-			assert.Equal(test, testCase.expectedDialOptionsLen, len(grpcDialOptions), testCase.name+"-GrpcDialOptionsLen")
-			// assert.Equal(test, testCase.expectedDialOptions, grpcDialOptions, testCase.name+"-GrpcDialOptions")
+			assert.Len(test, grpcDialOptions, testCase.expectedDialOptionsLen, testCase.name+"-GrpcDialOptionsLen")
 		})
 	}
 }
@@ -105,8 +104,8 @@ func TestParse(test *testing.T) {
 func ExampleParse_simple() {
 	// For more information, visit https://github.com/senzing-garage/go-grpcing/blob/main/grpcurl/grpcurl_test.go
 	ctx := context.TODO()
-	grpcUrl := "grpc://localhost:8258"
-	grpcTarget, grpcDialOptions, err := Parse(ctx, grpcUrl)
+	grpcURL := "grpc://localhost:8258"
+	grpcTarget, grpcDialOptions, err := Parse(ctx, grpcURL)
 	if err != nil {
 		fmt.Println(err)
 	}

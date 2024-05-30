@@ -13,14 +13,14 @@ import (
 
 func main() {
 	ctx := context.TODO()
-	grpcUrl := "grpc://localhost:8258"
+	grpcURL := "grpc://localhost:8258"
 
-	grpcTarget, grpcDialOptions, err := grpcurl.Parse(ctx, grpcUrl)
+	grpcTarget, grpcDialOptions, err := grpcurl.Parse(ctx, grpcURL)
 	if err != nil {
 		panic(err)
 	}
 
-	grpcConnection, err := grpc.Dial(grpcTarget, grpcDialOptions...)
+	grpcConnection, err := grpc.NewClient(grpcTarget, grpcDialOptions...)
 	if err != nil {
 		panic(err)
 	}
