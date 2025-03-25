@@ -120,11 +120,11 @@ linters:
 
 formatters:
   enable:
-    # - gci
-    # - gofmt
+    - gci
+    - gofmt
     # - gofumpt
     - goimports
-    - golines
+    # - golines
   exclusions:
     generated: lax
     paths:

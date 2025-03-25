@@ -27,7 +27,7 @@ Output
 */
 func Parse(ctx context.Context, grpcURL string) (string, []grpc.DialOption, error) {
 	var grpcTarget = ""
-	
+
 	var grpcDialOptions = []grpc.DialOption{}
 
 	parsedURL, err := url.Parse(grpcURL)
