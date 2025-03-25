@@ -63,11 +63,14 @@ func TestMain(m *testing.M) {
 		fmt.Print(err)
 		os.Exit(1)
 	}
+
 	code := m.Run()
+
 	err = teardown()
 	if err != nil {
 		fmt.Print(err)
 	}
+
 	os.Exit(code)
 }
 
@@ -87,6 +90,7 @@ func teardown() error {
 
 func TestParse(test *testing.T) {
 	ctx := context.TODO()
+
 	for _, testCase := range testCasesForGrpcurl {
 		test.Run(testCase.name, func(test *testing.T) {
 			grpcTarget, grpcDialOptions, err := Parse(ctx, testCase.url)
@@ -105,10 +109,12 @@ func ExampleParse_simple() {
 	// For more information, visit https://github.com/senzing-garage/go-grpcing/blob/main/grpcurl/grpcurl_test.go
 	ctx := context.TODO()
 	grpcURL := "grpc://localhost:8258"
+
 	grpcTarget, grpcDialOptions, err := Parse(ctx, grpcURL)
 	if err != nil {
 		fmt.Println(err)
 	}
+
 	fmt.Println(grpcTarget, len(grpcDialOptions))
 	// Output:
 	// localhost:8258 1
