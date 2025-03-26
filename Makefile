@@ -29,7 +29,7 @@ GO_ARCH = $(word 2, $(GO_OSARCH))
 
 # Conditional assignment. ('?=')
 # Can be overridden with "export"
-# Example: "export LD_LIBRARY_PATH=/path/to/my/senzing-garage/g2/lib"
+# Example: "export LD_LIBRARY_PATH=/path/to/my/senzing/er/lib"
 
 GOBIN ?= $(shell go env GOPATH)/bin
 
@@ -59,10 +59,13 @@ hello-world: hello-world-osarch-specific
 # Dependency management
 # -----------------------------------------------------------------------------
 
-.PHONY: make-dependencies
-make-dependencies:
+.PHONY: dependencies-for-development
+dependencies-for-development: dependencies-for-development-osarch-specific
+	@go install github.com/daixiang0/gci@latest
+	@go install github.com/gotesttools/gotestfmt/v2/cmd/gotestfmt@latest
 	@go install github.com/vladopajic/go-test-coverage/v2@latest
-	@curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(shell go env GOPATH)/bin v1.58.1
+	@go install golang.org/x/tools/cmd/godoc@latest
+	@docker-compose pull 2>/dev/null || true
 
 
 .PHONY: dependencies
@@ -72,18 +75,38 @@ dependencies:
 	@go mod tidy
 
 # -----------------------------------------------------------------------------
+# Setup
+# -----------------------------------------------------------------------------
+
+.PHONY: setup
+setup: setup-osarch-specific
+
+# -----------------------------------------------------------------------------
+# Lint
+# -----------------------------------------------------------------------------
+
+.PHONY: lint
+lint: golangci-lint
+
+# -----------------------------------------------------------------------------
 # Build
-#  - docker-build: https://docs.docker.com/engine/reference/commandline/build/
 # -----------------------------------------------------------------------------
 
 PLATFORMS := darwin/amd64 darwin/arm64 linux/amd64 linux/arm64 windows/amd64 windows/arm64
 $(PLATFORMS):
-	@echo Building $(TARGET_DIRECTORY)/$(GO_OS)-$(GO_ARCH)/$(PROGRAM_NAME)
+	$(info Building $(TARGET_DIRECTORY)/$(GO_OS)-$(GO_ARCH)/$(PROGRAM_NAME))
 	@GOOS=$(GO_OS) GOARCH=$(GO_ARCH) go build -o $(TARGET_DIRECTORY)/$(GO_OS)-$(GO_ARCH)/$(PROGRAM_NAME)
 
 
 .PHONY: build
 build: build-osarch-specific
+
+# -----------------------------------------------------------------------------
+# Run
+# -----------------------------------------------------------------------------
+
+.PHONY: run
+run: run-osarch-specific
 
 # -----------------------------------------------------------------------------
 # Test
@@ -103,26 +126,18 @@ coverage: coverage-osarch-specific
 .PHONY: check-coverage
 check-coverage: export SENZING_LOG_LEVEL=TRACE
 check-coverage:
-	go test ./... -coverprofile=./cover.out -covermode=atomic -coverpkg=./...
-	${GOBIN}/go-test-coverage --config=./.testcoverage.yml
+	@go test ./... -coverprofile=./cover.out -covermode=atomic -coverpkg=./...
+	@${GOBIN}/go-test-coverage --config=.github/coverage/testcoverage.yaml
 
 # -----------------------------------------------------------------------------
-# Lint
+# Documentation
 # -----------------------------------------------------------------------------
 
-.PHONY: run-golangci-lint
-run-golangci-lint:
-	${GOBIN}/golangci-lint run --config=.github/linters/.golangci.yml
+.PHONY: documentation
+documentation: documentation-osarch-specific
 
 # -----------------------------------------------------------------------------
-# Run
-# -----------------------------------------------------------------------------
-
-.PHONY: run
-run: run-osarch-specific
-
-# -----------------------------------------------------------------------------
-# Utility targets
+# Clean
 # -----------------------------------------------------------------------------
 
 .PHONY: clean
@@ -130,11 +145,14 @@ clean: clean-osarch-specific
 	@go clean -cache
 	@go clean -testcache
 
+# -----------------------------------------------------------------------------
+# Utility targets
+# -----------------------------------------------------------------------------
 
 .PHONY: help
 help:
-	@echo "Build $(PROGRAM_NAME) version $(BUILD_VERSION)-$(BUILD_ITERATION)".
-	@echo "Makefile targets:"
+	$(info Build $(PROGRAM_NAME) version $(BUILD_VERSION)-$(BUILD_ITERATION))
+	$(info Makefile targets:)
 	@$(MAKE) -pRrq -f $(firstword $(MAKEFILE_LIST)) : 2>/dev/null | awk -v RS= -F: '/^# File/,/^# Finished Make data base/ {if ($$1 !~ "^[#.]") {print $$1}}' | sort | egrep -v -e '^[^[:alnum:]]' -e '^$@$$' | xargs
 
 
@@ -142,14 +160,18 @@ help:
 print-make-variables:
 	@$(foreach V,$(sort $(.VARIABLES)), \
 		$(if $(filter-out environment% default automatic, \
-		$(origin $V)),$(warning $V=$($V) ($(value $V)))))
-
-
-.PHONY: setup
-setup: setup-osarch-specific
+		$(origin $V)),$(info $V=$($V) ($(value $V)))))
 
 
 .PHONY: update-pkg-cache
 update-pkg-cache:
 	@GOPROXY=https://proxy.golang.org GO111MODULE=on \
 		go get $(GO_PACKAGE_NAME)@$(BUILD_TAG)
+
+# -----------------------------------------------------------------------------
+# Specific programs
+# -----------------------------------------------------------------------------
+
+.PHONY: golangci-lint
+golangci-lint:
+	@${GOBIN}/golangci-lint run --config=.github/linters/.golangci.yaml

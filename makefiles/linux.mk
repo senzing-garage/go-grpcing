@@ -9,10 +9,6 @@
 # OS specific targets
 # -----------------------------------------------------------------------------
 
-.PHONY: build-osarch-specific
-build-osarch-specific: linux/amd64
-
-
 .PHONY: clean-osarch-specific
 clean-osarch-specific:
 	@rm -f  $(GOPATH)/bin/$(PROGRAM_NAME) || true
@@ -29,9 +25,21 @@ coverage-osarch-specific:
 	@xdg-open $(MAKEFILE_DIRECTORY)/coverage.html
 
 
+.PHONY: dependencies-for-development-osarch-specific
+dependencies-for-development-osarch-specific:
+	@curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(shell go env GOPATH)/bin latest
+
+
+.PHONY: documentation-osarch-specific
+documentation-osarch-specific:
+	@pkill godoc || true
+	@godoc &
+	@xdg-open http://localhost:6060
+
+
 .PHONY: hello-world-osarch-specific
 hello-world-osarch-specific:
-	@echo "Hello World, from linux."
+	$(info Hello World, from linux.)
 
 
 .PHONY: run-osarch-specific
@@ -46,7 +54,7 @@ setup-osarch-specific:
 
 .PHONY: test-osarch-specific
 test-osarch-specific:
-	@go test -v -p 1 ./...
+	@go test -json -v -p 1 ./... 2>&1 | tee /tmp/gotest.log | gotestfmt
 
 # -----------------------------------------------------------------------------
 # Makefile targets supported only by this platform.
@@ -54,4 +62,4 @@ test-osarch-specific:
 
 .PHONY: only-linux
 only-linux:
-	@echo "Only linux has this Makefile target."
+	$(info Only linux has this Makefile target.)

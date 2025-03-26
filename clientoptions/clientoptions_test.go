@@ -70,6 +70,7 @@ func TestMain(m *testing.M) {
 	if err != nil {
 		fmt.Print(err)
 	}
+
 	os.Exit(code)
 }
 
@@ -89,6 +90,7 @@ func teardown() error {
 
 func TestGetDialOptions(test *testing.T) {
 	ctx := context.TODO()
+
 	for _, testCase := range testCasesForGrpcurl {
 		test.Run(testCase.name, func(test *testing.T) {
 			parsedURL, err := url.Parse(testCase.url)
@@ -108,14 +110,17 @@ func ExampleGetDialOptions_simple() {
 	// For more information, visit https://github.com/senzing-garage/go-grpcing/blob/main/clientoptions/clientoptions_test.go
 	ctx := context.TODO()
 	grpcURL := "grpc://localhost:8258"
+
 	parsedURL, err := url.Parse(grpcURL)
 	if err != nil {
 		fmt.Println(err)
 	}
+
 	grpcDialOptions, err := GetDialOptions(ctx, *parsedURL)
 	if err != nil {
 		fmt.Println(err)
 	}
+
 	fmt.Println(len(grpcDialOptions))
 	// Output: 1
 }
