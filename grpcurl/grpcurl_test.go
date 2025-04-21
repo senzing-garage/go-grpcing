@@ -1,15 +1,15 @@
-package grpcurl
+package grpcurl_test
 
 import (
-	"context"
-	"errors"
 	"fmt"
-	"os"
 	"testing"
 
+	"github.com/senzing-garage/go-grpcing/grpcurl"
 	"github.com/stretchr/testify/assert"
 	"google.golang.org/grpc"
 )
+
+var err error
 
 var testCasesForGrpcurl = []struct {
 	name                   string
@@ -41,7 +41,10 @@ var testCasesForGrpcurl = []struct {
 		expectedTarget:         "",
 		expectedDialOptions:    []grpc.DialOption{},
 		expectedDialOptionsLen: 0,
-		expectedError:          errors.New("gRPC URL must start with grpc://, not http://.  (http://localhost:1234)"),
+		expectedError: fmt.Errorf(
+			"gRPC URL must start with grpc://, not http://.  (http://localhost:1234) Error: %w",
+			err,
+		),
 	},
 	{
 		name:                   "grpcurl-0004",
@@ -49,39 +52,10 @@ var testCasesForGrpcurl = []struct {
 		expectedTarget:         "localhost:1234",
 		expectedDialOptions:    []grpc.DialOption{},
 		expectedDialOptionsLen: 0,
-		expectedError:          errors.New("not sure how to parse gRPC URL: grpc://localhost:1234/bob/?something=\"bob2\""),
+		expectedError: fmt.Errorf(
+			"not sure how to parse gRPC URL: grpc://localhost:1234/bob/?something=\"bob2\" Error: %w", err,
+		),
 	},
-}
-
-// ----------------------------------------------------------------------------
-// Test harness
-// ----------------------------------------------------------------------------
-
-func TestMain(m *testing.M) {
-	err := setup()
-	if err != nil {
-		fmt.Print(err)
-		os.Exit(1)
-	}
-
-	code := m.Run()
-
-	err = teardown()
-	if err != nil {
-		fmt.Print(err)
-	}
-
-	os.Exit(code)
-}
-
-func setup() error {
-	var err error
-	return err
-}
-
-func teardown() error {
-	var err error
-	return err
 }
 
 // ----------------------------------------------------------------------------
@@ -89,33 +63,17 @@ func teardown() error {
 // ----------------------------------------------------------------------------
 
 func TestParse(test *testing.T) {
-	ctx := context.TODO()
+	test.Parallel()
+	ctx := test.Context()
 
 	for _, testCase := range testCasesForGrpcurl {
 		test.Run(testCase.name, func(test *testing.T) {
-			grpcTarget, grpcDialOptions, err := Parse(ctx, testCase.url)
+			test.Parallel()
+
+			grpcTarget, grpcDialOptions, err := grpcurl.Parse(ctx, testCase.url)
 			assert.Equal(test, testCase.expectedError, err, testCase.name+"-err")
 			assert.Equal(test, testCase.expectedTarget, grpcTarget, testCase.name+"-GrpcTarget")
 			assert.Len(test, grpcDialOptions, testCase.expectedDialOptionsLen, testCase.name+"-GrpcDialOptionsLen")
 		})
 	}
-}
-
-// ----------------------------------------------------------------------------
-// Examples for godoc documentation
-// ----------------------------------------------------------------------------
-
-func ExampleParse_simple() {
-	// For more information, visit https://github.com/senzing-garage/go-grpcing/blob/main/grpcurl/grpcurl_test.go
-	ctx := context.TODO()
-	grpcURL := "grpc://localhost:8258"
-
-	grpcTarget, grpcDialOptions, err := Parse(ctx, grpcURL)
-	if err != nil {
-		fmt.Println(err)
-	}
-
-	fmt.Println(grpcTarget, len(grpcDialOptions))
-	// Output:
-	// localhost:8258 1
 }

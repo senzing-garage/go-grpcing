@@ -25,7 +25,15 @@ func main() {
 		panic(err)
 	}
 
-	fmt.Printf("grpcTarget: %s\n", grpcTarget)
-	fmt.Printf("grpcDialOptions: %s\n", reflect.TypeOf(grpcDialOptions))
-	fmt.Printf("grpcConnection: %s\n", reflect.TypeOf(grpcConnection))
+	outputf("grpcTarget: %s\n", grpcTarget)
+	outputf("grpcDialOptions: %s\n", reflect.TypeOf(grpcDialOptions))
+	outputf("grpcConnection: %s\n", reflect.TypeOf(grpcConnection))
+}
+
+// ----------------------------------------------------------------------------
+// Private functions
+// ----------------------------------------------------------------------------
+
+func outputf(format string, message ...any) {
+	fmt.Printf(format, message...) //nolint
 }

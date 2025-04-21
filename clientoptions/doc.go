@@ -7,6 +7,6 @@ More information at https://github.com/senzing-garage/go-grpcing
 
 # Examples
 
-Examples of use can be seen in https://github.com/senzing-garage/go-grpcing/blob/main/clientoptions/clientoptions_test.go
+Usage examples can be seen in https://github.com/senzing-garage/go-grpcing/blob/main/clientoptions/clientoptions_test.go
 */
 package clientoptions
