@@ -25,8 +25,11 @@ Output
 */
 func GetDialOptions(ctx context.Context, parsedURL url.URL) ([]grpc.DialOption, error) {
 	_ = ctx
-	var err error
-	var grpcDialOptions = []grpc.DialOption{}
+
+	var (
+		err             error
+		grpcDialOptions = []grpc.DialOption{}
+	)
 
 	// userName := parsedUrl.User.Username()
 	// password, isSet := parsedUrl.User.Password()
@@ -35,7 +38,7 @@ func GetDialOptions(ctx context.Context, parsedURL url.URL) ([]grpc.DialOption, 
 	if len(queryParameters) == 0 {
 		grpcDialOptions = append(grpcDialOptions, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	} else {
-		err = fmt.Errorf("not sure how to parse gRPC URL: %s", parsedURL.String())
+		err = fmt.Errorf("not sure how to parse gRPC URL: %s Error: %w", parsedURL.String(), err)
 	}
 
 	return grpcDialOptions, err

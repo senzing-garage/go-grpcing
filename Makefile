@@ -1,4 +1,4 @@
-# Makefile for go-grpcing.
+# Makefile for Go project
 
 # Detect the operating system and architecture.
 

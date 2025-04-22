@@ -26,13 +26,15 @@ Output
   - grpcDialOptions: A slice of configuration options for gRPC server/client
 */
 func Parse(ctx context.Context, grpcURL string) (string, []grpc.DialOption, error) {
-	var grpcTarget = ""
-
-	var grpcDialOptions = []grpc.DialOption{}
+	var (
+		err             error
+		grpcTarget      = ""
+		grpcDialOptions = []grpc.DialOption{}
+	)
 
 	parsedURL, err := url.Parse(grpcURL)
 	if err != nil {
-		return grpcTarget, grpcDialOptions, err
+		return grpcTarget, grpcDialOptions, fmt.Errorf("url.Parse error: %w", err)
 	}
 
 	switch parsedURL.Scheme {
@@ -40,7 +42,8 @@ func Parse(ctx context.Context, grpcURL string) (string, []grpc.DialOption, erro
 		grpcTarget = parsedURL.Host
 		grpcDialOptions, err = clientoptions.GetDialOptions(ctx, *parsedURL)
 	default:
-		err = fmt.Errorf("gRPC URL must start with grpc://, not %s://.  (%s)", parsedURL.Scheme, grpcURL)
+		err = fmt.Errorf("gRPC URL must start with grpc://, not %s://.  (%s) Error: %w", parsedURL.Scheme, grpcURL, err)
 	}
+
 	return grpcTarget, grpcDialOptions, err
 }
